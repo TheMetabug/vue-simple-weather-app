@@ -1,0 +1,35 @@
+{
+  "name": "simple-weather-app",
+  "version": "1.0.0",
+  "description": "Shows weather from different cities using data from OpenWeatherMap API",
+  "main": "./server.js",
+  "dependencies": {
+    "bootstrap": "^4.4.1",
+    "bootstrap-vue": "^2.3.0",
+    "express": "^4.17.1",
+    "jquery": "^3.4.1",
+    "jsdom": "^16.0.1",
+    "node-schedule": "^1.3.2",
+    "vue": "^2.6.11"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "test-weather-app"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TheMetabug/vue-simple-weather-app.git"
+  },
+  "keywords": [
+    "Vue",
+    "Node",
+    "Weather",
+    "OpenWeatherMap"
+  ],
+  "author": "Asko Lahti",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/TheMetabug/vue-simple-weather-app/issues"
+  },
+  "homepage": "https://github.com/TheMetabug/vue-simple-weather-app#readme"
+}
