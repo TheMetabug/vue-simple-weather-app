@@ -1,14 +1,100 @@
-<html>
+<!doctype html>
+<html lang="fi">
     <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+
         <title>Weather app</title>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     </head>
     <body>
+        <div id="app">
+            <div class="d-flex flex-column align-items-center p-3 bg-white border-bottom shadow-sm">
+                <h4 class="font-weight-normal">Säätutka</h4>
+            </div>
+            <div class="container-fluid">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="col-md-6">
+                            <h5 class="card-title">{{ weatherData.cityname }}</h5>
+                            <small class="card-text">{{ weatherData.description }}</small>   
+                        </div>
+                        <div class="col-md-6">
+                            <image v-bind:src="weatherIcon"></image>
+                            <p class="card-text">{{ weatherData.current.temp }} C</p>
+                            <p class="card-text">{{ weatherData.current.humidity }}%</p>
+                            <p class="card-text">{{ weatherData.current.windspeed }} m/s</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-deck">
+                    <div class="card">
+                        <div class="card-body">
+                            <small class="card-text">03:00</small>
+                            <h5 class="card-title">-1 C</h5>
+                        </div>
+                        <div class="card-footer align-items-center">
+                            <p class="text-muted">5.22 m/s</p>
+                            <p class="text-muted">45%</small>
+                            <p class="text-muted">5 mm</p>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-body">
+                            <small class="card-text">03:00</small>
+                            <h5 class="card-title">-1 C</h5>
+                        </div>
+                        <div class="card-footer">
+                            <small class="text-muted">5.22 m/s</small>
+                            <small class="text-muted">45%</small>
+                            <small class="text-muted">5 mm</small>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-body">
+                            <small class="card-text">03:00</small>
+                            <h5 class="card-title">-1 C</h5>
+                        </div>
+                        <div class="card-footer">
+                            <small class="text-muted">5.22 m/s</small>
+                            <small class="text-muted">45%</small>
+                            <small class="text-muted">5 mm</small>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-body">
+                            <small class="card-text">03:00</small>
+                            <h5 class="card-title">-1 C</h5>
+                        </div>
+                        <div class="card-footer">
+                            <small class="text-muted">5.22 m/s</small>
+                            <small class="text-muted">45%</small>
+                            <small class="text-muted">5 mm</small>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-body">
+                            <small class="card-text">03:00</small>
+                            <h5 class="card-title">-1 C</h5>
+                        </div>
+                        <div class="card-footer">
+                            <small class="text-muted">5.22 m/s</small>
+                            <small class="text-muted">45%</small>
+                            <small class="text-muted">5 mm</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <p>{{ message }}</p>
+                <button class="btn btn-primary" v-bind:disabled="searchDisabled" v-on:click="printMessage">Print button</button>
+            </div>
+        </div>
         <script src="/jquery/jquery.min.js"></script>
         <script src="/vue/vue.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
         <script type="text/javascript" src="./js/main.js"></script>
-        <div id="app">
-            <p>{{ message }}</p>
-            <button v-on:click="printMessage">Print button</button>
-        </div>
     </body>
 </html>
