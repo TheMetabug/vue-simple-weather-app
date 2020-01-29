@@ -1,0 +1,117 @@
+
+:root {
+    --header-bg-color: #00a5e5;
+    --title-bg-color: #ffffff;
+    --content-light-bg-color: #ffffff;
+    --content-dark-bg-color: #f8f9fa;
+    --content-footer-bg-color: #e5f6fd;
+    --font-light-color: #70757A;
+    --font-dark-color: #262626;
+}
+
+html * {
+    font-family: Arial;
+}
+
+body {
+    background-color: var(--content-dark-bg-color);
+}
+
+#header-top {
+    background-color: var(--header-bg-color);
+    padding-bottom: 2rem;
+}
+
+.app-title {
+    color: var(--font-dark-color);
+    font-size: 23pt;
+    font-weight: 300;
+}
+
+#app {
+    max-width: 500px;
+    min-width: 360px;
+}
+
+.no-margin {
+    margin-bottom: 0rem;
+}
+
+.content-card {
+    position: relative;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    min-width: 0;
+    word-wrap: break-word;
+    background-color: #fff;
+    background-clip: border-box;
+    border: 1px solid rgba(0,0,0,.125);
+    border-radius: .25rem;
+}
+.weather-city-text {
+    font-size: 19pt;
+    font-weight: 500;
+    color: var(--font-dark-color);
+}
+.weather-description-text {
+    font-size: 13pt;
+    color: var(--font-light-color);
+}
+.weather-temperature-text {
+    font-size: 26pt;
+    font-weight: 500;
+    color: var(--font-dark-color);
+}
+.weather-date-text {
+    font-size: 15pt;
+    color: var(--font-dark-color);
+}
+.weather-time-text {
+    font-size: 13pt;
+    color: var(--font-light-color);
+}
+.weather-other-text {
+    text-align: right;
+    font-size: 13pt;
+    color: var(--font-light-color);
+    margin-bottom: 0rem;
+}
+.forecast-card {
+    min-width: 70px;
+}
+.forecast-card-body  {
+    padding: 0.25rem 0rem 0.25rem 0rem;
+    text-align: center;
+}
+.forecast-card-footer {
+    padding: 0.25rem 0rem 0.25rem 0rem;
+    text-align: center;
+    background-color: var(--content-footer-bg-color);
+}
+.small-forecast-text {
+    font-size: 10pt;
+    color: var(--font-light-color);
+    margin-bottom: 0.1rem;
+}
+.medium-forecast-text {
+    font-size: 13pt;
+    color: var(--font-light-color);
+    margin-bottom: 0.1rem;
+}
+.big-forecast-text {
+    font-size: 15pt;
+    font-weight: 500;
+    color: var(--font-light-color);
+    margin-bottom: 0.1rem;
+}
+.small-weather-icon {
+    max-width: 3rem;
+    max-height: 3rem;
+    image-rendering: auto;
+}
+.large-weather-icon {
+    image-rendering: auto;
+    max-width: none;
+}

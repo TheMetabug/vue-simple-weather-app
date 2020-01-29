@@ -7,86 +7,111 @@
 
         <title>Weather app</title>
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+        <link rel="stylesheet" href="/css/style.css">
     </head>
     <body>
-        <div id="app">
-            <div class="d-flex flex-column align-items-center p-3 bg-white border-bottom shadow-sm">
-                <h4 class="font-weight-normal">Säätutka</h4>
-            </div>
-            <div class="container-fluid">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="col-md-6">
-                            <h5 class="card-title">{{ weatherData.cityname }}</h5>
-                            <small class="card-text">{{ weatherData.description }}</small>   
+        <div id="header-top" class="d-flex flex-column">
+        </div>
+        <div id="header-title" class="d-flex flex-column align-items-center p-3 bg-white border-bottom shadow-sm">
+            <h4 class="app-title">Säätutka</h4>
+        </div>
+        <div class="d-flex justify-content-center">
+            <div id="app">
+                <div class="d-flex">
+                    <div class="content-card p-2 p-md-4 flex-fill">
+                        <div class="d-flex justify-content-between">
+                            <div class="align-self-center">
+                                <h4 class="weather-city-text no-margin">{{ weatherData.cityname }}</h4>
+                                <p class="weather-description-text no-margin">{{ weatherData.description }}</p>
+                            </div>
+                            <div class="d-flex align-self-end">
+                                <div class="align-self-start">
+                                    <image class="large-weather-icon" v-bind:src="weatherIcon"></image>
+                                </div>
+                                <div class="align-self-center">
+                                    <h1 class="weather-temperature-text">{{ weatherData.current.temp }}&degC</h1>
+                                </div>
+                            </div>
                         </div>
-                        <div class="col-md-6">
-                            <image v-bind:src="weatherIcon"></image>
-                            <p class="card-text">{{ weatherData.current.temp }} C</p>
-                            <p class="card-text">{{ weatherData.current.humidity }}%</p>
-                            <p class="card-text">{{ weatherData.current.windspeed }} m/s</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="card-deck">
-                    <div class="card">
-                        <div class="card-body">
-                            <small class="card-text">03:00</small>
-                            <h5 class="card-title">-1 C</h5>
-                        </div>
-                        <div class="card-footer align-items-center">
-                            <p class="text-muted">5.22 m/s</p>
-                            <p class="text-muted">45%</small>
-                            <p class="text-muted">5 mm</p>
-                        </div>
-                    </div>
-                    <div class="card">
-                        <div class="card-body">
-                            <small class="card-text">03:00</small>
-                            <h5 class="card-title">-1 C</h5>
-                        </div>
-                        <div class="card-footer">
-                            <small class="text-muted">5.22 m/s</small>
-                            <small class="text-muted">45%</small>
-                            <small class="text-muted">5 mm</small>
-                        </div>
-                    </div>
-                    <div class="card">
-                        <div class="card-body">
-                            <small class="card-text">03:00</small>
-                            <h5 class="card-title">-1 C</h5>
-                        </div>
-                        <div class="card-footer">
-                            <small class="text-muted">5.22 m/s</small>
-                            <small class="text-muted">45%</small>
-                            <small class="text-muted">5 mm</small>
-                        </div>
-                    </div>
-                    <div class="card">
-                        <div class="card-body">
-                            <small class="card-text">03:00</small>
-                            <h5 class="card-title">-1 C</h5>
-                        </div>
-                        <div class="card-footer">
-                            <small class="text-muted">5.22 m/s</small>
-                            <small class="text-muted">45%</small>
-                            <small class="text-muted">5 mm</small>
-                        </div>
-                    </div>
-                    <div class="card">
-                        <div class="card-body">
-                            <small class="card-text">03:00</small>
-                            <h5 class="card-title">-1 C</h5>
-                        </div>
-                        <div class="card-footer">
-                            <small class="text-muted">5.22 m/s</small>
-                            <small class="text-muted">45%</small>
-                            <small class="text-muted">5 mm</small>
+                        <div class="d-flex justify-content-between">
+                            <div class="align-self-end">
+                                <p class="weather-date-text no-margin">May 2nd</p>
+                                <p class="weather-time-text no-margin">11:00</p>
+                            </div>
+                            <div class="align-self-start">
+                                <p class="weather-other-text no-margin">Humidity:&nbsp;{{ weatherData.current.humidity }}%</p>
+                                <p class="weather-other-text no-margin">Wind:&nbsp;{{ weatherData.current.windspeed }}&nbsp;m/s</p>
+                                <p class="weather-other-text no-margin">Precipitation:&nbsp;{{ weatherData.current.windspeed }}&nbsp;mm</p>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div>
+                <div class="d-flex justify-content-between">
+                    <div class="forecast-card content-card">
+                        <div class="forecast-card-body justify-content-center">
+                            <p class="medium-forecast-text">03:00</p>
+                            <image class="small-weather-icon" v-bind:src="weatherIcon"></image>
+                            <p class="big-forecast-text">-1&degC</p>
+                        </div>
+                        <div class="forecast-card-footer justify-content-center">
+                            <p class="small-forecast-text text-muted">5.22 m/s</p>
+                            <p class="small-forecast-text text-muted">45%</p>
+                            <p class="small-forecast-text text-muted">5 mm</p>
+                        </div>
+                    </div>
+                    
+                    <div class="forecast-card content-card">
+                        <div class="forecast-card-body justify-content-center">
+                            <p class="medium-forecast-text">03:00</p>
+                            <image class="small-weather-icon" v-bind:src="weatherIcon"></image>
+                            <p class="big-forecast-text">-1&degC</p>
+                        </div>
+                        <div class="forecast-card-footer justify-content-center">
+                            <p class="small-forecast-text text-muted">5.22 m/s</p>
+                            <p class="small-forecast-text text-muted">45%</p>
+                            <p class="small-forecast-text text-muted">5 mm</p>
+                        </div>
+                    </div>
+                    
+                    <div class="forecast-card content-card">
+                        <div class="forecast-card-body justify-content-center">
+                            <p class="medium-forecast-text">03:00</p>
+                            <image class="small-weather-icon" v-bind:src="weatherIcon"></image>
+                            <p class="big-forecast-text">-1&degC</p>
+                        </div>
+                        <div class="forecast-card-footer justify-content-center">
+                            <p class="small-forecast-text text-muted">5.22 m/s</p>
+                            <p class="small-forecast-text text-muted">45%</p>
+                            <p class="small-forecast-text text-muted">5 mm</p>
+                        </div>
+                    </div>
+                    
+                    <div class="forecast-card content-card">
+                        <div class="forecast-card-body justify-content-center">
+                            <p class="medium-forecast-text">03:00</p>
+                            <image class="small-weather-icon" v-bind:src="weatherIcon"></image>
+                            <p class="big-forecast-text">-1&degC</p>
+                        </div>
+                        <div class="forecast-card-footer justify-content-center">
+                            <p class="small-forecast-text text-muted">5.22 m/s</p>
+                            <p class="small-forecast-text text-muted">45%</p>
+                            <p class="small-forecast-text text-muted">5 mm</p>
+                        </div>
+                    </div>
+                    
+                    <div class="forecast-card content-card">
+                        <div class="forecast-card-body justify-content-center">
+                            <p class="medium-forecast-text">03:00</p>
+                            <image class="small-weather-icon" v-bind:src="weatherIcon"></image>
+                            <p class="big-forecast-text">-1&degC</p>
+                        </div>
+                        <div class="forecast-card-footer justify-content-center">
+                            <p class="small-forecast-text text-muted">5.22 m/s</p>
+                            <p class="small-forecast-text text-muted">45%</p>
+                            <p class="small-forecast-text text-muted">5 mm</p>
+                        </div>
+                    </div>
+                </div>
                 <p>{{ message }}</p>
                 <button class="btn btn-primary" v-bind:disabled="searchDisabled" v-on:click="printMessage">Print button</button>
             </div>
@@ -98,3 +123,19 @@
         <script type="text/javascript" src="./js/main.js"></script>
     </body>
 </html>
+
+<!--
+          <div class="col-md-6 col-sm-8 col-12 offset-md-3 offset-sm-2" id="app">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-4">
+                                <h4 class="card-title" style="max-width: none;">{{ weatherData.cityname }}</h4>
+                                <small class="card-text" style="max-width: none;">{{ weatherData.description }}</small>
+                            </div>
+                            <div class="col-4 offset-1">
+                                <image style="max-width: none;" v-bind:src="weatherIcon"></image>
+                            </div>
+                            <h1 class="card-text" style="align-self: center;">{{ weatherData.current.temp }} C</h1>
+                        </div>
+-->
