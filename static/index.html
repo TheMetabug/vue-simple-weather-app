@@ -21,27 +21,29 @@
                     <div class="content-card p-2 p-md-4 flex-fill">
                         <div class="d-flex justify-content-between">
                             <div class="align-self-center">
-                                <h4 class="weather-city-text no-margin">{{ weatherData.cityname }}</h4>
-                                <p class="weather-description-text no-margin">{{ weatherData.description }}</p>
+                                <h4 class="weather-city-text no-margin">{{ currentWeather.cityname }}</h4>
+                                <p class="weather-description-text no-margin">{{ currentWeather.description }}</p>
                             </div>
                             <div class="d-flex align-self-end">
                                 <div class="align-self-start">
-                                    <image class="large-weather-icon" v-bind:src="weatherIcon"></image>
+                                    <image class="large-weather-icon" v-bind:src="currentWeather.icon"></image>
                                 </div>
                                 <div class="align-self-center">
-                                    <h1 class="weather-temperature-text">{{ weatherData.current.temp }}&degC</h1>
+                                    <h1 class="weather-temperature-text">{{ currentWeather.temp }}&degC</h1>
                                 </div>
                             </div>
                         </div>
                         <div class="d-flex justify-content-between">
                             <div class="align-self-end">
-                                <p class="weather-date-text no-margin">May 2nd</p>
-                                <p class="weather-time-text no-margin">11:00</p>
+                                <p class="weather-date-text no-margin">{{ currentWeather.month }}&nbsp;{{ currentWeather.day }}</p>
+                                <p class="weather-time-text no-margin">{{ currentWeather.clock }}</p>
                             </div>
                             <div class="align-self-start">
-                                <p class="weather-other-text no-margin">Humidity:&nbsp;{{ weatherData.current.humidity }}%</p>
-                                <p class="weather-other-text no-margin">Wind:&nbsp;{{ weatherData.current.windspeed }}&nbsp;m/s</p>
-                                <p class="weather-other-text no-margin">Precipitation:&nbsp;{{ weatherData.current.windspeed }}&nbsp;mm</p>
+                                <p class="weather-other-text no-margin">Humidity:&nbsp;{{ currentWeather.humidity }}%</p>
+                                <p class="weather-other-text no-margin">Wind:&nbsp;{{ currentWeather.windspeed }}&nbsp;m/s</p>
+                                <span v-if="currentWeather.precipitation != false" class="weather-other-text no-margin"></span>
+                                <p class="weather-other-text no-margin">&nbsp;{{ currentWeather.precipitation }}</p>
+                                <span v-if="currentWeather.precipitation != false" class="weather-other-text no-margin">&nbsp;mm</span>
                             </div>
                         </div>
                     </div>
@@ -50,7 +52,7 @@
                     <div class="forecast-card content-card">
                         <div class="forecast-card-body justify-content-center">
                             <p class="medium-forecast-text">03:00</p>
-                            <image class="small-weather-icon" v-bind:src="weatherIcon"></image>
+                            <image class="small-weather-icon" v-bind:src="currentWeather.icon"></image>
                             <p class="big-forecast-text">-1&degC</p>
                         </div>
                         <div class="forecast-card-footer justify-content-center">
@@ -63,7 +65,7 @@
                     <div class="forecast-card content-card">
                         <div class="forecast-card-body justify-content-center">
                             <p class="medium-forecast-text">03:00</p>
-                            <image class="small-weather-icon" v-bind:src="weatherIcon"></image>
+                            <image class="small-weather-icon" v-bind:src="currentWeather.icon"></image>
                             <p class="big-forecast-text">-1&degC</p>
                         </div>
                         <div class="forecast-card-footer justify-content-center">
@@ -76,7 +78,7 @@
                     <div class="forecast-card content-card">
                         <div class="forecast-card-body justify-content-center">
                             <p class="medium-forecast-text">03:00</p>
-                            <image class="small-weather-icon" v-bind:src="weatherIcon"></image>
+                            <image class="small-weather-icon" v-bind:src="currentWeather.icon"></image>
                             <p class="big-forecast-text">-1&degC</p>
                         </div>
                         <div class="forecast-card-footer justify-content-center">
@@ -89,7 +91,7 @@
                     <div class="forecast-card content-card">
                         <div class="forecast-card-body justify-content-center">
                             <p class="medium-forecast-text">03:00</p>
-                            <image class="small-weather-icon" v-bind:src="weatherIcon"></image>
+                            <image class="small-weather-icon" v-bind:src="currentWeather.icon"></image>
                             <p class="big-forecast-text">-1&degC</p>
                         </div>
                         <div class="forecast-card-footer justify-content-center">
@@ -102,7 +104,7 @@
                     <div class="forecast-card content-card">
                         <div class="forecast-card-body justify-content-center">
                             <p class="medium-forecast-text">03:00</p>
-                            <image class="small-weather-icon" v-bind:src="weatherIcon"></image>
+                            <image class="small-weather-icon" v-bind:src="currentWeather.icon"></image>
                             <p class="big-forecast-text">-1&degC</p>
                         </div>
                         <div class="forecast-card-footer justify-content-center">
@@ -113,7 +115,7 @@
                     </div>
                 </div>
                 <p>{{ message }}</p>
-                <button class="btn btn-primary" v-bind:disabled="searchDisabled" v-on:click="printMessage">Print button</button>
+                <button class="btn btn-primary" v-bind:disabled="searchDisabled" v-on:click="fetchWeatherData">Print button</button>
             </div>
         </div>
         <script src="/jquery/jquery.min.js"></script>
