@@ -1,13 +1,18 @@
-var doc = $(document).ready(function() {
-    // Weather icon url information
-    var weatherIconUrl      = 'http://openweathermap.org/img/wn/'
-    var weatherIconFilename = '@2x.png'
+let doc = $(document).ready(function() {
+    /**
+     * Variables used globally in this script 
+     */
 
-    // Test weather data (placeholder)
-    var tempWeatherObject = {
+    // Weather icon url information
+    let weatherIconUrl      = 'http://openweathermap.org/img/wn/'
+    let weatherIconFilename = '@2x.png'
+
+    // Dummy weather data (placeholder if something goes wrong)
+    let tempWeatherObject = {
         cityname: "City name",
         forecasts: [{
             description: "description",
+            dateTime: new Date(),
             clock: "00:00",
             month: "May",
             day: "2nd",
@@ -19,13 +24,16 @@ var doc = $(document).ready(function() {
         }]
     }
 
-    // Vue App
-    var app = new Vue({
+    /**
+     * Vue App object
+     */ 
+    let app = new Vue({
         el: '#app',
         data: {
             message:        'Hello',
             searchDisabled: false,
             weatherData:    tempWeatherObject,
+            forecastList:   [],
             timer: ''
         },
         created () {
@@ -33,72 +41,76 @@ var doc = $(document).ready(function() {
             this.timer = setInterval(this.fetchWeatherData(), 10000)
         },
         computed: {
-            currentWeather: function() {
+            currentWeather () {
+                self = this
                 data = this.weatherData
                 if (data != undefined) {
-                    console.log(data)
-                    var curTime = new Date()
-                    var curClock = curTime.toLocaleTimeString('en-GB', { hour: "numeric"}) + ":00"
-                    var result = false
+                    let curTime = new Date()
+                    // let curClock = curTime.toLocaleTimeString('en-GB', { hour: "numeric"}) + ":00"
+                    let foundCurrentWeather = false
+                    let forecastList = []
                     data.forecasts.forEach(forecast => {
-                        if (curClock == forecast.clock && result == false) {
-                            result = {
-                                cityname:       data.cityname,
-                                description:    forecast.description,
-                                clock:          forecast.clock,
-                                month:          forecast.month,
-                                day:            forecast.day,
-                                icon:           forecast.icon,
-                                temp:           forecast.temp,
-                                humidity:       forecast.humidity,
-                                windspeed:      forecast.windspeed,
-                                precipitation:  forecast.precipitation
+                        // Get nearest forecast weather for current time
+                        if (foundCurrentWeather == false) {
+                            if (self.isTimeABeforeB(curTime, forecast.dateTime, 3)) {
+                                forecastList.push(self.createForecastObject(data, forecast))
+                                foundCurrentWeather = true
+                            }
+                        } else {
+                            // Add 5 more forecast data to list before quitting this for loop
+                            if (forecastList.length < 5) {
+                                forecastList.push(self.createForecastObject(data, forecast))
                             }
                         }
                     })
-                    return result
+                    this.forecastList = forecastList
+                    return forecastList[0]
                 }
                 return tempWeatherObject
+            },
+            currentForecastList () {
+                return this.forecastList
             }
         },
         methods: {
-            fetchWeatherData: function() {
-                var parameters = { city: "All-cities" }
-                var self = this
+            fetchWeatherData () {
+                let parameters = { city: "All-cities" }
+                let self = this
                 $.ajax({
                     url: '/weatherdata',
                     data: parameters,
-                    beforeSend: function(xhr) {
-                        this.searchDisabled = true
+                    beforeSend: (xhr) => {
+                        self.searchDisabled = true
                     },
-                    success: function(result, xhr, status) {
+                    success: (result, xhr, status) => {
                         self.parseWeatherData(result)
                     },
-                    error: function(xhr, status, error) {
+                    error: (xhr, status, error) => {
                         console.log(status);
                         console.log(error);
                     },
-                    complete: function(xhr, status) {
-                        this.searchDisabled = false
+                    complete: (xhr, status) => {
+                        self.searchDisabled = false
                     }
                 })
             },
-            parseWeatherData: function(jsonData) {
-                var self = this
-                var countryWeathers = []
+            parseWeatherData (jsonData) {
+                let self = this
+                let countryWeathers = []
                 if (Object.keys(jsonData.countries).length >= 1) {
                     jsonData.countries.forEach(country => {
-                        var singleWeather = {
+                        let singleWeather = {
                             cityname: country.city.name,
                             forecasts: []
                         }
                         country.list.forEach(forecast => {
-                            var foreCastTime =  new Date(forecast.dt_txt.replace(/-/g,"/"))
-                            var clockTime =     new Date(foreCastTime).toLocaleTimeString('en-GB', { hour: "numeric", minute: "numeric"})
-                            var monthTime =     new Date(foreCastTime).toLocaleString('en-GB', { month: "short" })
-                            var dateTime =      new Date(foreCastTime).toLocaleString('en-GB', { day: "numeric" })
-                            var singleForecast = {
+                            let foreCastTime =  new Date(forecast.dt_txt.replace(/-/g,"/"))
+                            let clockTime =     new Date(foreCastTime).toLocaleTimeString('en-GB',  { hour: "numeric", minute: "numeric"})
+                            let monthTime =     new Date(foreCastTime).toLocaleString('en-GB',      { month: "short" })
+                            let dateTime =      new Date(foreCastTime).toLocaleString('en-GB',      { day: "numeric" })
+                            let singleForecast = {
                                 description:    forecast.weather[0].description,
+                                dateTime:       foreCastTime,
                                 clock:          clockTime,
                                 month:          monthTime,
                                 day:            dateTime.toString() + self.nth(dateTime),
@@ -116,7 +128,35 @@ var doc = $(document).ready(function() {
                 // console.log(countryWeathers[0])
                 this.weatherData = countryWeathers[0];
             },
-            nth: function(d) {
+            isTimeABeforeB: (timeA, timeB, hours = 1) => {
+                // one hour in milliseconds
+                let dtA = new Date(timeA).getTime()
+                let dtB = new Date(timeB).getTime()
+
+                let timeStamp = Math.round(dtA / 1000)
+                let timeStampHoursAgo = timeStamp - (hours * 3600)
+                let dtAMinushours = new Date(timeStampHoursAgo*1000).getTime()
+
+                let isBetween = (dtA > dtB) && (dtB > dtAMinushours)
+                return isBetween
+
+            },
+            createForecastObject (data, forecastData) {
+                result = {
+                    cityname:       data.cityname,
+                    description:    forecastData.description,
+                    clock:          forecastData.clock,
+                    month:          forecastData.month,
+                    day:            forecastData.day,
+                    icon:           forecastData.icon,
+                    temp:           forecastData.temp,
+                    humidity:       forecastData.humidity,
+                    windspeed:      forecastData.windspeed,
+                    precipitation:  forecastData.precipitation
+                }
+                return result
+            },
+            nth: (d) => {
                 if (d > 3 && d < 21) return 'th'
                 switch (d % 10) {
                     case 1:  return "st"
