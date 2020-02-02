@@ -1,5 +1,6 @@
 # Simple weather app
 Simple weather app using Vue.js
+
 Weather data is collected from OpenWeatherMap API.
 
 This project is made by Asko Lahti
