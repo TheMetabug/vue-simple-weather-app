@@ -3,35 +3,44 @@ let doc = $(document).ready(function() {
      * Variables used globally in this script 
      */
 
-    // Weather icon url information
-    let weatherIconUrl      = 'http://openweathermap.org/img/wn/'
-    let weatherIconFilename = '@2x.png'
-
     /**
      * Vue App object
      */ 
     let app = new Vue({
         el: '#app',
         data: {
-            message:        'Hello',
-            searchDisabled: false,
-            // weatherData:    tempWeatherObject,
-            cityList:       [],
-            timer: ''
+            cityList: [],
+            timer: '',
+            selectedCity: 'Helsinki, Jyväskylä, Kuopio, Tampere',
+            selectOptions: [
+                { text: 'Kaikki', value: 'Helsinki, Jyväskylä, Kuopio, Tampere' },
+                { text: 'Helsinki', value: 'Helsinki' },
+                { text: 'Jyväskylä', value: 'Jyväskylä' },
+                { text: 'Kuopio', value: 'Kuopio' },
+                { text: 'Tampere', value: 'Tampere' },
+              ]
+        },
+        computed: {
+            filteredCityList () {
+                if (this.selectOptions != undefined) {
+                    if (this.selectedCity == this.selectOptions[0].value) {
+                        return this.cityList
+                    } else {
+                        return this.cityList.filter(city => city.cityname.indexOf(this.selectedCity) > -1)
+                    }
+                }
+            }
         },
         created () {
             this.timer = setInterval(this.fetchWeatherData(), 10000)
         },
         methods: {
             fetchWeatherData () {
-                let parameters = { city: "All-cities" }
+                const parameters = { city: "All-cities" }
                 let self = this
                 $.ajax({
                     url: '/weatherdata',
                     data: parameters,
-                    beforeSend: (xhr) => {
-                        self.searchDisabled = true
-                    },
                     success: (result, xhr, status) => {
                         self.parseWeatherData(result)
                     },
@@ -39,9 +48,6 @@ let doc = $(document).ready(function() {
                         console.log(status);
                         console.log(error);
                     },
-                    complete: (xhr, status) => {
-                        self.searchDisabled = false
-                    }
                 })
             },
             parseWeatherData (jsonData) {
@@ -56,7 +62,7 @@ let doc = $(document).ready(function() {
             },
             createCityObject (cityData) {
                 let self = this
-                let curTime = new Date()
+                const curTime = new Date()
 
                 cityObj = {}
                 cityObj.cityname = cityData.city.name
@@ -64,7 +70,7 @@ let doc = $(document).ready(function() {
                 cityObj.forecasts = []
 
                 cityData.list.forEach(forecast => {
-                    let forecastTime = new Date(forecast.dt_txt.replace(/-/g,"/"))
+                    const forecastTime = new Date(forecast.dt_txt.replace(/-/g,"/"))
                     // Get nearest forecast weather for current time
                     if (cityObj.currentWeather == false) {
                         if (self.isTimeABeforeB(curTime, forecastTime, 3)) {
@@ -80,9 +86,11 @@ let doc = $(document).ready(function() {
                 return cityObj
             },
             createForecastObject (forecastData, forecastTime) {
-                let clockTime =     new Date(forecastTime).toLocaleTimeString('fi',  { hour: "numeric", minute: "numeric"})
-                let monthTime =     new Date(forecastTime).toLocaleString('fi',      { month: "short" })
-                let dateTime =      new Date(forecastTime).toLocaleString('fi',      { day: "numeric" })
+                const weatherIconUrl      = 'http://openweathermap.org/img/wn/'
+                const weatherIconFilename = '@2x.png'
+                const clockTime =     new Date(forecastTime).toLocaleTimeString('fi',  { hour: "numeric", minute: "numeric"})
+                const monthTime =     new Date(forecastTime).toLocaleString('fi',      { month: "short" })
+                const dateTime =      new Date(forecastTime).toLocaleString('fi',      { day: "numeric" })
                 let singleForecast = {
                     description:    forecastData.weather[0].description,
                     dateTime:       forecastTime,
@@ -121,33 +129,5 @@ let doc = $(document).ready(function() {
           clearInterval(this.timer)
         }
     });
-    
-    // Placeholder weather data if something goes wrong
-    let tempWeatherObject = [{
-        cityname: "City name",
-        currentWeather: {
-            description: "description",
-            dateTime: new Date(),
-            clock: "00:00",
-            month: "May",
-            day: "2nd",
-            icon: weatherIconUrl + "10d" + weatherIconFilename,
-            temp: 0,
-            humidity: 0,
-            windspeed: 0,
-            precipitation: 40
-        },
-        forecasts: [{
-            description: "description",
-            dateTime: new Date(),
-            clock: "00:00",
-            month: "May",
-            day: "2nd",
-            icon: weatherIconUrl + "10d" + weatherIconFilename,
-            temp: 0,
-            humidity: 0,
-            windspeed: 0,
-            precipitation: 40
-        }],
-    }]
+
 });

@@ -1,6 +1,5 @@
 
 :root {
-    --header-bg-color: #00a5e5;
     --title-bg-color: #ffffff;
     --content-light-bg-color: #ffffff;
     --content-dark-bg-color: #f8f9fa;
@@ -8,35 +7,49 @@
     --font-light-color: #70757A;
     --font-dark-color: #262626;
 }
-
 html * {
     font-family: Arial;
 }
-
 body {
     background-color: var(--content-dark-bg-color);
 }
 
-#header-top {
-    background-color: var(--header-bg-color);
-    padding-bottom: 2rem;
-}
 
+#main-content {
+    padding-top: 2rem;
+}
 .app-title {
     color: var(--font-dark-color);
     font-size: 23pt;
     font-weight: 300;
 }
-
 #app {
-    max-width: 500px;
-    min-width: 360px;
+    min-width: 95%;
 }
-
+@media screen and (min-width: 500px) {
+    #app {
+        min-width: 470px
+    }
+}
+select {
+    margin-bottom: 2rem;
+}
 .no-margin {
     margin-bottom: 0rem;
 }
+.capitalizetext::first-letter {
+    text-transform: capitalize;
+}
+.form-control {
+    font-size: 13pt;
+    font-weight: 500;
+    color: var(--font-dark-color);
+}
 
+
+.city-content {
+    margin-bottom: 2rem;
+}
 .content-card {
     position: relative;
     display: -ms-flexbox;
@@ -49,7 +62,10 @@ body {
     background-clip: border-box;
     border: 1px solid rgba(0,0,0,.125);
     border-radius: .25rem;
+    margin-bottom: 0.75rem;
 }
+
+
 .weather-city-text {
     font-size: 19pt;
     font-weight: 500;
@@ -78,8 +94,10 @@ body {
     color: var(--font-light-color);
     margin-bottom: 0rem;
 }
+
+
 .forecast-card {
-    min-width: 70px;
+    min-width: 18%;
 }
 .forecast-card-body  {
     padding: 0.25rem 0rem 0.25rem 0rem;
@@ -90,6 +108,8 @@ body {
     text-align: center;
     background-color: var(--content-footer-bg-color);
 }
+
+
 .small-forecast-text {
     font-size: 10pt;
     color: var(--font-light-color);
@@ -106,6 +126,8 @@ body {
     color: var(--font-light-color);
     margin-bottom: 0.1rem;
 }
+
+
 .small-weather-icon {
     max-width: 3rem;
     max-height: 3rem;
