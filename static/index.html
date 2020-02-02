@@ -6,7 +6,7 @@
         <meta name="theme-color" content="#00A5E5" />
         <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
 
-        <title>Weather app</title>
+        <title>Säätutka</title>
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
         <link rel="stylesheet" href="/css/style.css">
     </head>
@@ -45,9 +45,9 @@
                                         <p class="weather-time-text no-margin">{{ city.currentWeather.clock }}</p>
                                     </div>
                                     <div class="align-self-start">
-                                        <p class="weather-other-text no-margin">Humidity:&nbsp;{{ city.currentWeather.humidity }}%</p>
-                                        <p class="weather-other-text no-margin">Wind:&nbsp;{{ city.currentWeather.windspeed }}&nbsp;m/s</p>
-                                        <p class="weather-other-text no-margin">Precipitation:&nbsp;{{ (city.currentWeather.precipitation) ? city.currentWeather.precipitation : 0 }}&nbsp;mm</p>
+                                        <p class="weather-other-text no-margin">Kosteus:&nbsp;{{ city.currentWeather.humidity }}%</p>
+                                        <p class="weather-other-text no-margin">Tuuli:&nbsp;{{ city.currentWeather.windspeed }}&nbsp;m/s</p>
+                                        <p class="weather-other-text no-margin">Sademäärä:&nbsp;{{ (city.currentWeather.precipitation) ? city.currentWeather.precipitation : 0 }}&nbsp;mm</p>
                                     </div>
                                 </div>
                             </div>
