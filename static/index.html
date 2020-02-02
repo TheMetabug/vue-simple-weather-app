@@ -18,7 +18,7 @@
             <div class="d-flex justify-content-center">
                 <div id="app">
                     <select class="form-control" v-model="selectedCity">
-                        <option v-for="option in selectOptions" v-bind:value="option.value">
+                        <option v-for="option in selectOptions.slice().reverse()" v-bind:value="option.value">
                             {{ option.text }}
                           </option>
                     </select>

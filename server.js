@@ -21,7 +21,7 @@ let createJSON = (jsonData) => {
     let jsonFile = ""
 
     // Create obj with data of city weathers
-    let saveTime = new Date().setMinutes(0, 0, 0)
+    let saveTime = new Date().setMinutes(0, 1, 0)
     let obj = {
         lastUpdate: saveTime,
         citylist: []
@@ -114,18 +114,14 @@ var getDataUri = (weatherOptions, cityId) => {
 }
 
 /**
- * Helper function for checking is timeB in between range of (TimeA - hours) and TimeA
+ * Helper function for checking is timeB in after (TimeA - hours)
  */
-var isTimeABeforeB = (timeA, timeB, hours = 1) => {
+var isTimeToReload = (timeA, timeB, hours = 1) => {
     let dtA = new Date(timeA).getTime()
     let dtB = new Date(timeB).getTime()
 
-    let timeStamp = Math.round(dtA / 1000)
-    let timeStampHoursAgo = timeStamp - (hours * 3600)
-    let dtAMinushours = new Date(timeStampHoursAgo*1000).getTime()
-
-    let isBetween = (dtA > dtB) && (dtB > dtAMinushours)
-    return isBetween
+    let isTime = ((dtA -dtB) >= (hours * 3600 * 1000))
+    return isTime
 }
 
 /**
@@ -157,8 +153,8 @@ app.get('/weatherdata', (req, res) => {
         let curTime = new Date()
         let dataTime  = new Date(currentJsonData.lastUpdate)
 
-        // API updates the data every 3 hours so refresh the data if last update was 3 hours or more ago
-        if (!isTimeABeforeB(curTime, dataTime, 3)) {
+        // API updates the data every 3 hours but we can check hourly just in case
+        if (isTimeToReload(curTime, dataTime, 1)) {
             sendApiRequest(res, optionsJson)
         // If data is fresh, just give the old JSON data again
         } else {
