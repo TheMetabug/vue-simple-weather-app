@@ -33,11 +33,23 @@ let createJSON = (jsonData) => {
 
     // Convert to JSON and save that JSON to a file
     jsonFile = JSON.stringify(obj)
-    fs.writeFileSync(__dirname + '/data/weatherData.json', jsonFile, 'utf8', (err) => {
+    fs.writeFileSync('data/weatherData.json', jsonFile, 'utf8', (err) => {
         if (err) throw err;
         console.log("File has been saved!")
     })
     return obj
+}
+
+let sendApiRequest = (res, optionsJson) => {
+    try {
+        // Fetch api json and save/send the json
+        getDataFromApi(optionsJson, (apiData) => {
+            let newJson = createJSON(apiData) 
+            res.json(newJson)
+        })
+    } catch (err) {
+        console.log(err)
+    }
 }
 
 /**
@@ -127,29 +139,31 @@ app.get('/', (req, res) => {
  * GET request for fetching the JSON data to display
  */
 app.get('/weatherdata', (req, res) => {
+    if (!fs.existsSync('data/weatherOptions.json')) {
+        throw new Error("weatherOptions.json not found!")
+    }
+
     let optionsFile = fs.readFileSync('data/weatherOptions.json');
-    let jsonFile =  fs.readFileSync(__dirname + '/data/weatherData.json')
-
     let optionsJson =  JSON.parse(optionsFile)
-    let currentJsonData =  JSON.parse(jsonFile)
 
-    let curTime = new Date()
-    let dataTime  = new Date(currentJsonData.lastUpdate)
-    try {
+    // If file does not exist, go to directly to api request
+    if (!fs.existsSync('data/weatherData.json')) {
+        console.log("File 'data/weatherData.json' not found, create a new one.")
+        sendApiRequest(res, optionsJson)
+    } else {   
+        let jsonFile =  fs.readFileSync('data/weatherData.json')
+        let currentJsonData =  JSON.parse(jsonFile)
+    
+        let curTime = new Date()
+        let dataTime  = new Date(currentJsonData.lastUpdate)
+
         // API updates the data every 3 hours so refresh the data if last update was 3 hours or more ago
         if (!isTimeABeforeB(curTime, dataTime, 3)) {
-            // Fetch api json and save/send the json
-            getDataFromApi(optionsJson, (apiData) => {
-                let newJson = createJSON(apiData) 
-                res.json(newJson)
-            })
+            sendApiRequest(res, optionsJson)
         // If data is fresh, just give the old JSON data again
         } else {
             res.json(currentJsonData)  
         }
-    } catch (err) {
-        console.log(err)
-        res.json(currentJsonData)
     }
 })
 

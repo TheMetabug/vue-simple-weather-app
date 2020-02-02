@@ -81,7 +81,6 @@ let doc = $(document).ready(function() {
              */
             createCityObject (cityData) {
                 let self = this
-                const curTime = new Date()
 
                 cityObj = {}
                 cityObj.cityname = cityData.city.name
@@ -92,9 +91,7 @@ let doc = $(document).ready(function() {
                     const forecastTime = new Date(forecast.dt_txt.replace(/-/g,"/"))
                     // Get nearest forecast weather for current time
                     if (cityObj.currentWeather == false) {
-                        if (self.isTimeABeforeB(curTime, forecastTime, 3)) {
-                            cityObj.currentWeather = self.createForecastObject(forecast, forecastTime)
-                        }
+                        cityObj.currentWeather = self.createForecastObject(forecast, forecastTime)
                     } else {
                         // Add 5 more forecast data to list before quitting this for loop
                         if (cityObj.forecasts.length < 5) {
@@ -138,20 +135,6 @@ let doc = $(document).ready(function() {
                 } else if (forecastData.hasOwnProperty('snow')) {
                     return forecastData.snow["3h"]
                 }
-            },
-            /**
-             * Helper function for checking is timeB in between range of (TimeA - hours) and TimeA
-             */
-            isTimeABeforeB: (timeA, timeB, hours = 1) => {
-                const dtA = new Date(timeA).getTime()
-                const dtB = new Date(timeB).getTime()
-
-                const timeStamp = Math.round(dtA / 1000)
-                const timeStampHoursAgo = timeStamp - (hours * 3600)
-                const dtAMinushours = new Date(timeStampHoursAgo*1000).getTime()
-
-                const isBetween = (dtA > dtB) && (dtB > dtAMinushours)
-                return isBetween
             },
             /**
              * Helper function to calculate next refresh time in ms
