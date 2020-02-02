@@ -17,48 +17,48 @@
         </div>
         <div class="d-flex justify-content-center">
             <div id="app">
-                <div class="d-flex">
-                    <div class="content-card p-2 p-md-4 flex-fill">
-                        <div class="d-flex justify-content-between">
-                            <div class="align-self-center">
-                                <h4 class="weather-city-text no-margin">{{ currentWeather.cityname }}</h4>
-                                <p class="weather-description-text no-margin">{{ currentWeather.description }}</p>
-                            </div>
-                            <div class="d-flex align-self-end">
-                                <div class="align-self-start">
-                                    <image class="large-weather-icon" v-bind:src="currentWeather.icon"></image>
-                                </div>
+                <div v-for="city in cityList">
+                    <div class="d-flex">
+                        <div class="content-card p-2 p-md-4 flex-fill">
+                            <div class="d-flex justify-content-between">
                                 <div class="align-self-center">
-                                    <h1 class="weather-temperature-text">{{ currentWeather.temp }}&degC</h1>
+                                    <h4 class="weather-city-text no-margin">{{ city.cityname }}</h4>
+                                    <p class="weather-description-text no-margin">{{ city.currentWeather.description }}</p>
+                                </div>
+                                <div class="d-flex align-self-end">
+                                    <div class="align-self-start">
+                                        <image class="large-weather-icon" v-bind:src="city.currentWeather.icon"></image>
+                                    </div>
+                                    <div class="align-self-center">
+                                        <h1 class="weather-temperature-text">{{ city.currentWeather.temp }}&degC</h1>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="d-flex justify-content-between">
+                                <div class="align-self-end">
+                                    <p class="weather-date-text no-margin">{{ city.currentWeather.month }}&nbsp;{{ city.currentWeather.day }}</p>
+                                    <p class="weather-time-text no-margin">{{ city.currentWeather.clock }}</p>
+                                </div>
+                                <div class="align-self-start">
+                                    <p class="weather-other-text no-margin">Humidity:&nbsp;{{ city.currentWeather.humidity }}%</p>
+                                    <p class="weather-other-text no-margin">Wind:&nbsp;{{ city.currentWeather.windspeed }}&nbsp;m/s</p>
+                                    <p class="weather-other-text no-margin">Precipitation:&nbsp;{{ (city.currentWeather.precipitation) ? city.currentWeather.precipitation : 0 }}&nbsp;mm</p>
                                 </div>
                             </div>
                         </div>
-                        <div class="d-flex justify-content-between">
-                            <div class="align-self-end">
-                                <p class="weather-date-text no-margin">{{ currentWeather.month }}&nbsp;{{ currentWeather.day }}</p>
-                                <p class="weather-time-text no-margin">{{ currentWeather.clock }}</p>
+                    </div v-for="city in cityList">
+                    <div class="d-flex justify-content-between">
+                        <div v-for="forecast in city.forecasts" class="forecast-card content-card">
+                            <div class="forecast-card-body justify-content-center">
+                                <p class="medium-forecast-text">{{ forecast.clock }}</p>
+                                <image class="small-weather-icon" v-bind:src="forecast.icon"></image>
+                                <p class="big-forecast-text">{{ forecast.temp }}&degC</p>
                             </div>
-                            <div class="align-self-start">
-                                <p class="weather-other-text no-margin">Humidity:&nbsp;{{ currentWeather.humidity }}%</p>
-                                <p class="weather-other-text no-margin">Wind:&nbsp;{{ currentWeather.windspeed }}&nbsp;m/s</p>
-                                <span v-if="currentWeather.precipitation != false" class="weather-other-text no-margin"></span>
-                                <p class="weather-other-text no-margin">&nbsp;{{ currentWeather.precipitation }}</p>
-                                <span v-if="currentWeather.precipitation != false" class="weather-other-text no-margin">&nbsp;mm</span>
+                            <div class="forecast-card-footer justify-content-center">
+                                <p class="small-forecast-text text-muted">{{ forecast.windspeed }}&nbspm/s</p>
+                                <p class="small-forecast-text text-muted">{{ forecast.humidity }}%</p>
+                                <p class="small-forecast-text text-muted">{{ (forecast.precipitation) ? forecast.precipitation : 0 }}&nbspmm</p>
                             </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="d-flex justify-content-between">
-                    <div v-for="forecast in forecastList" class="forecast-card content-card">
-                        <div class="forecast-card-body justify-content-center">
-                            <p class="medium-forecast-text">{{ forecast.clock }}</p>
-                            <image class="small-weather-icon" v-bind:src="forecast.icon"></image>
-                            <p class="big-forecast-text">{{ forecast.temp }}&degC</p>
-                        </div>
-                        <div class="forecast-card-footer justify-content-center">
-                            <p class="small-forecast-text text-muted">{{ forecast.windspeed }}&nbspm/s</p>
-                            <p class="small-forecast-text text-muted">{{ forecast.humidity }}%</p>
-                            <p class="small-forecast-text text-muted">{{ forecast.clock }}&nbspmm</p>
                         </div>
                     </div>
                 </div>
