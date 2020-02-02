@@ -13,7 +13,7 @@ This project is made by Asko Lahti
 
 
 data/weatherOptions.json
-```json
+```
 {
     "apiKey": "xxxxxxxxxxxxxxxxxxxxxxxxxx", <--- Your own API key from OpenWeatherMap
     "appHost": "api.openweathermap.org", <--- Api url to OpenWeatherMap
