@@ -1,9 +1,5 @@
 let doc = $(document).ready(function() {
     /**
-     * Variables used globally in this script 
-     */
-
-    /**
      * Vue App object
      */ 
     let app = new Vue({
@@ -11,36 +7,35 @@ let doc = $(document).ready(function() {
         data: {
             cityList: [],
             timer: '',
-            selectedCity: 'Helsinki, Jyväskylä, Kuopio, Tampere',
-            selectOptions: [
-                { text: 'Kaikki', value: 'Helsinki, Jyväskylä, Kuopio, Tampere' },
-                { text: 'Helsinki', value: 'Helsinki' },
-                { text: 'Jyväskylä', value: 'Jyväskylä' },
-                { text: 'Kuopio', value: 'Kuopio' },
-                { text: 'Tampere', value: 'Tampere' },
-              ]
+            selectedCity: undefined,
+            selectOptions: undefined
         },
         computed: {
+            /**
+             * Get currently selected city from select element. Returns whole when "All" option is selected.
+             */
             filteredCityList () {
                 if (this.selectOptions != undefined) {
-                    if (this.selectedCity == this.selectOptions[0].value) {
+                    let filteredCity = this.cityList.filter(city => city.cityname.indexOf(this.selectedCity) > -1)
+                    if (filteredCity.length < 1) {
                         return this.cityList
-                    } else {
-                        return this.cityList.filter(city => city.cityname.indexOf(this.selectedCity) > -1)
                     }
+                    return filteredCity
                 }
             }
         },
         created () {
-            this.timer = setInterval(this.fetchWeatherData(), 10000)
+            // Create method to automatically refresh to get newest forecast data
+            this.timer = setInterval(this.fetchWeatherData(), this.nextRefreshTime())
         },
         methods: {
+            /**
+             * Send GET AJAX request to server to get data from JSON file
+             */
             fetchWeatherData () {
-                const parameters = { city: "All-cities" }
                 let self = this
                 $.ajax({
                     url: '/weatherdata',
-                    data: parameters,
                     success: (result, xhr, status) => {
                         self.parseWeatherData(result)
                     },
@@ -50,6 +45,9 @@ let doc = $(document).ready(function() {
                     },
                 })
             },
+            /**
+             * Parse weather information from given JSON data from server
+             */
             parseWeatherData (jsonData) {
                 let self = this
                 let cityWeatherList = []
@@ -58,8 +56,29 @@ let doc = $(document).ready(function() {
                         cityWeatherList.push(self.createCityObject(cityData))
                     })
                 }
+                if (this.selectedCity == undefined) {
+                    let cityNameList = []
+                    let cityOptionList = []
+                    cityWeatherList.forEach(cityData  => {
+                        let cityName = cityData.cityname
+                        cityNameList.push(cityName)
+                        cityOptionList.push({
+                            text: cityName,
+                            value: cityName,
+                        })
+                    })
+                    cityOptionList.push({
+                        text: 'Kaikki',
+                        value: cityNameList.toString(),
+                    })
+                    this.selectedCity = cityNameList.toString()
+                    this.selectOptions = cityOptionList
+                }
                 this.cityList = cityWeatherList;
             },
+            /**
+             * Helper function to create single city object
+             */
             createCityObject (cityData) {
                 let self = this
                 const curTime = new Date()
@@ -85,6 +104,9 @@ let doc = $(document).ready(function() {
                 })
                 return cityObj
             },
+            /**
+             * Helper function to create single forecast object
+             */
             createForecastObject (forecastData, forecastTime) {
                 const weatherIconUrl      = 'http://openweathermap.org/img/wn/'
                 const weatherIconFilename = '@2x.png'
@@ -105,14 +127,21 @@ let doc = $(document).ready(function() {
                 }
                 return singleForecast
             },
+            /**
+             * Helper function to get precipitation
+             * API data has snow/rain property ONLY if there is rain/snow happening
+             * so we need to do safetycheck if data containst it or not.
+             */
             readPrecipitation(forecastData) {
-                // API data has snow/rain property ONLY if there is rain/snow happening
                 if (forecastData.hasOwnProperty('rain')) {
                     return forecastData.rain["3h"]
                 } else if (forecastData.hasOwnProperty('snow')) {
                     return forecastData.snow["3h"]
                 }
             },
+            /**
+             * Helper function for checking is timeB in between range of (TimeA - hours) and TimeA
+             */
             isTimeABeforeB: (timeA, timeB, hours = 1) => {
                 const dtA = new Date(timeA).getTime()
                 const dtB = new Date(timeB).getTime()
@@ -123,6 +152,20 @@ let doc = $(document).ready(function() {
 
                 const isBetween = (dtA > dtB) && (dtB > dtAMinushours)
                 return isBetween
+            },
+            /**
+             * Helper function to calculate next refresh time in ms
+             * This helps page to refresh every hour
+             */
+            nextRefreshTime: () => {
+                const curTime = new Date().getTime()
+                const timeStamp = Math.round(curTime / 1000)
+                const timeStampHoursAgo = timeStamp + (3600)
+
+                // Get next hour with minute value to set 0
+                // and set minutes with extra second to let API have time to refresh on their end
+                const nextHour = new Date(timeStampHoursAgo*1000).setMinutes(0,1,0) 
+                return nextHour - curTime
             },
         },
         beforeDestroy () {
