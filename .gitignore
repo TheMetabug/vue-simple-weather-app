@@ -108,3 +108,4 @@ package-lock.json
 
 # Data folder (these files are written by application)
 data/
+!*data/weatherOptionsSample.json
